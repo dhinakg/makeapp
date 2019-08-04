@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # created by DhinakG
 
+# cd to current dir
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 # unmount any already mounted base system
 if [ -d "/Volumes/macOS Base System" ]
 then
