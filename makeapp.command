@@ -1,8 +1,17 @@
 #!/usr/bin/env bash
 # created by DhinakG
 
-# cd to current dir
-cd "$(dirname "${BASH_SOURCE[0]}")"
+# check for directory arg
+if [ ! -z "$1" ]
+then
+	cd "$1"
+	echo "Directory $1 specified"
+
+else
+	# no directory arg, use current directory
+	cd "$(dirname "${BASH_SOURCE[0]}")"
+	echo "No directory specific, using current directory"
+fi
 
 # unmount any already mounted base system
 if [ -d "/Volumes/macOS Base System" ]
@@ -55,6 +64,9 @@ mkdir "${loc}/Contents/SharedSupport"
 mv Apple* "${loc}/Contents/SharedSupport"
 mv BaseSys* "${loc}/Contents/SharedSupport"
 
+# remove any InstallESD directory
+rm -r InstallESD
+
 # expand InstallESD package to get InstallESD
 pkgutil --expand-full InstallESDDmg.pkg InstallESD/
 
@@ -66,4 +78,4 @@ mv InstallESDDmg.chunklist "${loc}/Contents/SharedSupport"
 # copy InstallInfo
 mv InstallInfo* "${loc}/Contents/SharedSupport"
 
-echo Done
+echo "Done."
