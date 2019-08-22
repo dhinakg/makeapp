@@ -29,11 +29,11 @@ hdiutil attach BaseSystem.dmg
 # copy Install macOS .app
 if [ -d "/Volumes/macOS Base System" ]
 then
-	cp -r /Volumes/"macOS Base System"/Install\ *.app .
+	cp -PR /Volumes/"macOS Base System"/Install\ *.app .
 fi
 if [ -d "/Volumes/OS X Base System" ]
 then
-	cp -r /Volumes/"OS X Base System"/Install\ *.app .
+	cp -PR /Volumes/"OS X Base System"/Install\ *.app .
 fi
 
 # unmount Base System
@@ -63,19 +63,15 @@ mkdir "${loc}/Contents/SharedSupport"
 # move AppleDiagnostics, BaseSystem to SharedSupport
 mv Apple* "${loc}/Contents/SharedSupport"
 mv BaseSys* "${loc}/Contents/SharedSupport"
-
-# remove any InstallESD directory
-rm -r InstallESD
-
-# expand InstallESD package to get InstallESD
-pkgutil --expand-full InstallESDDmg.pkg InstallESD/
-
-# copy InstallESD to SharedSupport
-mv InstallESD/InstallESD.dmg .
-mv InstallESD.dmg "${loc}/Contents/SharedSupport"
-mv InstallESDDmg.chunklist "${loc}/Contents/SharedSupport"
+mv InstallESDDmg.pkg "${loc}/Contents/SharedSupport/InstallESD.dmg"
 
 # copy InstallInfo
 mv InstallInfo* "${loc}/Contents/SharedSupport"
+
+# edit InstallInfo
+plutil -remove "Payload Image Info.chunklistURL" "${loc}/Contents/SharedSupport/InstallInfo.plist"
+plutil -remove "Payload Image Info.chunklistid" "${loc}/Contents/SharedSupport/InstallInfo.plist"
+plutil -replace "Payload Image Info.id" -string "com.apple.dmg.InstallESD" "${loc}/Contents/SharedSupport/InstallInfo.plist"
+plutil -replace "Payload Image Info.URL" -string "InstallESD.dmg" "${loc}/Contents/SharedSupport/InstallInfo.plist"
 
 echo "Done."
