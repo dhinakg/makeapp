@@ -1,4 +1,6 @@
 # makeapp
+
+# Deprecated, please use [the one that comes with gibMacOS](https://github.com/corpnewt/gibMacOS/blob/master/BuildmacOSInstallApp.command) instead.
 Creates a Install macOS .app from a gibMacOS full install.
 
 Usage:
